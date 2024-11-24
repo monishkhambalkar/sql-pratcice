@@ -145,4 +145,44 @@ SELECT D.department_name, AVG(E.salary) as average_salary FROM Employee
 JOIN Department D ON E.department_id = D.department_id 
 GROUP BY D.department_name ORDER BY average_salary DESC LIMIT 1
 
+-- 31. Find employees who are making less than the minimum salary in their department.
+SELECT E.first_name, E.last_name, E.salary, D.department_name FROM Employee E
+JOIN Department D ON E.department_id = D.department_id
+WHERE E.salary < (SELECT MIN(salary) FROM Employee WHERE department_id = E.department_id)
 
+-- 32. Find all employees who earn the same as at least two other employees.
+SELECT E.first_name, E.last_name FROM Employee E where (SELECT COUNT(*) from Employee E1 WHERE E1.salary = E.salary) >= 3
+
+-- 33. Write a recursive query to list managers and their direct reports. 
+
+WITH RECURSIVE ManagerHierarchy AS (
+    -- Anchor member: Start with employees who do not have a manager (top-level managers)
+    SELECT 
+        employee_id AS manager_id,
+        first_name AS manager_name,
+        employee_id AS employee_id,
+        first_name AS employee_name,
+        0 AS level
+    FROM Employee
+    WHERE manager_id IS NULL
+
+    UNION ALL
+
+    -- Recursive member: Find direct reports for each manager
+    SELECT 
+        mh.manager_id,
+        mh.manager_name,
+        e.employee_id,
+        e.first_name AS employee_name,
+        mh.level + 1 AS level
+    FROM Employee e
+    INNER JOIN ManagerHierarchy mh
+        ON e.manager_id = mh.employee_id
+)
+-- Final query: List all managers and their direct reports
+SELECT 
+    manager_name,
+    employee_name,
+    level
+FROM ManagerHierarchy
+ORDER BY manager_name, level, employee_name;
