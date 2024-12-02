@@ -42,3 +42,43 @@ Order_Items Table:
 |      2       |    101   |     3      |    1     | 1299.99|
 |      3       |    102   |     2      |    3     | 899.99 |
 +--------------+----------+------------+----------+--------+
+
+-- 1.Select All Users
+SELECT * FROM Users;
+
+-- 2.Find Users by Username
+SELECT * FROM Users WHERE username = 'john_doe';
+
+-- 3. List All Orders
+SELECT * FROM Orders;
+
+-- 4.Get Orders by User ID
+SELECT * FROM Orders WHERE user_id = 1;
+
+-- 5. Retrieve Products in Stock
+SELECT * FROM Products WHERE stock_quantity > 0;
+
+-- 6. List Products in a Specific Category
+SELECT * FROM Products WHERE category_id = 2;
+
+-- 7.Find Total Number of Orders
+SELECT COUNT(*) AS total_orders FROM Orders;
+
+-- 8.Calculate Total Sales Amount
+SELECT SUM(total_amount) AS total_sales FROM Orders
+
+-- 9. Find Users Who Made More Than 5 Orders
+SELECT user_id, COUNT(*) as total_orders FROM Orders GROUP BY user_id having COUNT(*) > 5
+
+-- 10. Get Order Items for a Specific Order
+SELECT * FROM Order_Items WHERE order_id = 1;
+
+-- 11. Join Users with Orders
+SELECT U.user_id, U.username FROM Users 
+JOIN Order O ON U.user_id = O.user_id
+
+-- 12. Find Orders with More Than 3 Items
+SELECT oi.order_id, COUNT(oi.order_item_id) AS item_count FROM Order_Items oi GROUP BY oi.order_id HAVING item_count > 3;
+
+-- 13.Get Total Sales Per Product
+SELECT product_id, SUM(quantity * price) as total_sales FROM Order_Items GROUP BY product_id
