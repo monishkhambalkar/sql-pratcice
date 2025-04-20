@@ -105,6 +105,7 @@ ALTER TABLE Users ADD COLUMN last_login DATETIME
 -- 20.Create Index on Orders Table
 CREATE INDEX index_order_date ON Orders(order_date)
 
+
 --27.Find the Largest Order Value Per User
 
 SELECT user_id, MAX(price) AS max_order_value
@@ -126,7 +127,33 @@ LEFT JOIN Products ON Order_Items.product_id = Products.product_id
 GROUP BY Products.product_name
 order by product_count DESC
 LIMIT 1;
+=======
+-- 21.Find Top 3 Products by Sales
+SELECT Products.product_name, sum(Order_Items.quantity * Orders.price) as total_sales
+FROM Order_Items
+JOIN Products ON Order_Items.product_id = Products.product_id
+GROUP BY Products.product_name
+ORDER by total_sales DESC
+LIMIT 1;
 
+-- 22.Calculate Average Order Value
+SELECT AVG(total_amount) AS avg_order_value FROM Orders
+
+-- 23.Find Users Who Made Orders in the Last 30 Days
+SELECT DISTINCT User.user_id, Users.username from Users
+JOIN Orders ON Users.user_id = Order.order_id 
+WHERE Orders.order_date >= NOW() - INTERVAL 30 DAY;
+
+-- 24.Get Order Count and Total Sales Per User
+SELECT Users.username, count(Orders.order_id) AS total_orders, SUM(Orders.total_amount) AS total_sales
+FROM Orders
+JOIN Users ON Orders.user_id = Users.user_id
+GROUP BY Orders.username
+
+-- 25.Find Products That Have Never Been Ordered
+SELECT Products.product_name FROm Products
+LEFT JOIN Order_Items ON Products.product_id = Order_Items.product_id
+WHERE Order_Items.order_item_id IS NULL
 
 
 Common Tables and Columns
