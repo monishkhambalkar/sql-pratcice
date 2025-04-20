@@ -105,10 +105,34 @@ ALTER TABLE Users ADD COLUMN last_login DATETIME
 -- 20.Create Index on Orders Table
 CREATE INDEX index_order_date ON Orders(order_date)
 
+--27.Find the Largest Order Value Per User
+
+SELECT user_id, MAX(price) AS max_order_value
+from Orders
+GROUP BY user_id
+
+-- 28.Calculate the Running Total of Sales by Day
+
+SELECT order_date, SUM(total_amount) AS daily_sales,
+       SUM(SUM(total_amount)) OVER (ORDER BY order_date) AS running_total
+FROM Orders
+GROUP BY order_date;
+
+
+--29.Find the Most Frequent Product Ordered
+SELECT Products.product_name, COUNT(Order_Items.product_id) as product_count
+FROM Order_Items 
+LEFT JOIN Products ON Order_Items.product_id = Products.product_id
+GROUP BY Products.product_name
+order by product_count DESC
+LIMIT 1;
+
+
 
 Common Tables and Columns
 Users Table:
-+---------+----------+---------------------+----------+------------+
++---------+----------+---------------------+------28.Calculate the Running Total of Sales by Day
+----+------------+
 | user_id | username | email               | password | created_at
 +---------+----------+---------------------+----------+-------------+
 |    1    | john_doe | john@example.com     | ******** | 2024-11-16 10:00:00 |
