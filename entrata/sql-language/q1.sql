@@ -25,21 +25,29 @@ The 5 Main SQL Language Categories
         To delete tables
         To define indexes & constraints 
 
+3.  Common DDL Commands
+    | Command    | Use                              |
+    | ---------- | -------------------------------- |
+    | `CREATE`   | Create objects                   |
+    | `ALTER`    | Modify structure                 |
+    | `DROP`     | Delete object                    |
+    | `TRUNCATE` | Remove all data (keep structure) |
+    | `RENAME`   | Rename object                    |
 
+CREATE TABLE User(
+    user_id INT PRIMARY KEY,
+    name varchar(100),
+    created_at DATETIME,
+    created_by INT,
+    status INT
+);
 
+ALTER TABLE User ADD COLUMN phone after name
 
+DCL  data constrol language 
 
+GRANT SELCT , INSERT
+on Tenent
 
-
-
-
-
-
-
-
-
-
-
-
-*/
+REVOKE delete on Tenent 
 
